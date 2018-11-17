@@ -1,0 +1,110 @@
+version: '3'
+services:
+  zookeeper:
+    image: 'confluentinc/cp-zookeeper:5.0.0'
+    restart: always
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      COMPONENT: zookeeper
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  zookeeper2:
+    image: 'confluentinc/cp-zookeeper:5.0.0'
+    restart: always
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_PORT: 2182
+      COMPONENT: zookeeper
+      ZOOKEEPER_CLIENT_PORT: 2182
+      ZOOKEEPER_TICK_TIME: 2000
+
+  zookeeper3:
+    image: 'confluentinc/cp-zookeeper:5.0.0'
+    restart: always
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_PORT: 2183
+      COMPONENT: zookeeper
+      ZOOKEEPER_CLIENT_PORT: 2183
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: 'confluentinc/cp-kafka:5.0.0'
+    stop_grace_period: 120s
+    depends_on:
+      - zookeeper
+      - zookeeper2
+      - zookeeper3
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
+    environment:
+      COMPONENT: kafka
+      KAFKA_BROKER_ID: 1001
+      KAFKA_RESERVED_BROKER_MAX_ID: 10000
+      KAFKA_ZOOKEEPER_CONNECT: 'localhost:2181'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_JMX_OPTS: '-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=broker -Djava.net.preferIPv4Stack=true -Dcom.sun.management.jmxremote.rmi.port=8500'
+
+  broker2:
+    image: 'confluentinc/cp-kafka:5.0.0'
+    stop_grace_period: 120s
+    depends_on:
+      - zookeeper
+      - zookeeper2
+      - zookeeper3
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
+    environment:
+      COMPONENT: kafka
+      KAFKA_BROKER_ID: 1002
+      KAFKA_RESERVED_BROKER_MAX_ID: 10000
+      KAFKA_ZOOKEEPER_CONNECT: 'localhost:2181,localhost:2182,localhost:2183'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9093'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_JMX_OPTS: '-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=broker -Djava.net.preferIPv4Stack=true -Dcom.sun.management.jmxremote.rmi.port=8500'
+
+
+  broker3:
+    image: 'confluentinc/cp-kafka:5.0.0'
+    stop_grace_period: 120s
+    depends_on:
+      - zookeeper
+      - zookeeper2
+      - zookeeper3
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
+    environment:
+      COMPONENT: kafka
+      KAFKA_BROKER_ID: 1003
+      KAFKA_RESERVED_BROKER_MAX_ID: 10000
+      KAFKA_ZOOKEEPER_CONNECT: 'localhost:2181,localhost:2182,localhost:2183'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9094'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_JMX_OPTS: '-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=broker -Djava.net.preferIPv4Stack=true -Dcom.sun.management.jmxremote.rmi.port=8500'
