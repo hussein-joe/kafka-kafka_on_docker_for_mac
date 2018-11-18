@@ -7,7 +7,7 @@ docker run -d --name pause_container \
     -p 2183:2183 \
     gcr.io/google_containers/pause-amd64:3.0
 
-docker exec kafka_broker_1 kafka-topics --zookeeper localhost:2181,localhost:2182,localhost:2183 --create --topic test --partitions 1 --replication-factor 1
+docker exec kafka_broker_1 kafka-topics --zookeeper localhost:2181,localhost:2182,localhost:2183 --create --topic test --partitions 10 --replication-factor 3
 
 docker exec -it kafka_broker_1 kafka-console-producer --broker-list localhost:9092,localhost:9093,localhost:9094 --topic test
 docker exec -it kafka_broker_1 kafka-console-consumer --bootstrap-server localhost:9092,localhost:9093,localhost:9094 --topic test --from-beginning

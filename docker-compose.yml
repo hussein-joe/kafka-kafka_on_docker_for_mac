@@ -1,24 +1,12 @@
 version: '3'
 services:
-  pause_container:
-    image: 'gcr.io/google_containers/pause-amd64:3.0'
-    container_name: pause_container
-    ports:
-      - "9092:9092"
-      - "9093:9093" 
-      - "9094:9094"
-      - "2181:2181"
-      - "2182:2182"
-      - "2183:2183"
   zookeeper1:
     image: 'confluentinc/cp-zookeeper:5.0.0'
     restart: always
     container_name: zookeeper1
-    depends_on:
-      - pause_container
-    network_mode: "service:pause_container"
-    ipc: "service:pause_container"
-    pid: "service:pause_container"
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
     environment:
       ZOO_MY_ID: 1
       ZOO_PORT: 2181
@@ -31,11 +19,10 @@ services:
     stop_grace_period: 120s
     container_name: kafka_broker_1
     depends_on:
-      - pause_container
-      - zookeeper1
-    network_mode: "service:pause_container"
-    ipc: "service:pause_container"
-    pid: "service:pause_container"
+    - zookeeper1
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
     environment:
       COMPONENT: kafka
       KAFKA_BROKER_ID: 1001
@@ -53,11 +40,10 @@ services:
     stop_grace_period: 120s
     container_name: kafka_broker_2
     depends_on:
-      - pause_container
-      - zookeeper1
-    network_mode: "service:pause_container"
-    ipc: "service:pause_container"
-    pid: "service:pause_container"
+    - zookeeper1
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
     environment:
       COMPONENT: kafka
       KAFKA_BROKER_ID: 1002
@@ -76,11 +62,10 @@ services:
     stop_grace_period: 120s
     container_name: kafka_broker_3
     depends_on:
-      - pause_container
-      - zookeeper1
-    network_mode: "service:pause_container"
-    ipc: "service:pause_container"
-    pid: "service:pause_container"
+    - zookeeper1
+    network_mode: "container:pause_container"
+    ipc: "container:pause_container"
+    pid: "container:pause_container"
     environment:
       COMPONENT: kafka
       KAFKA_BROKER_ID: 1003
